@@ -14,14 +14,13 @@ const require = createRequire(import.meta.url);
 async function getAllElectronVersions() {
   const response = await fetch("https://registry.npmjs.org/electron");
   const data = await response.json();
-  return Object.keys(data.versions)
-    .filter((version) => parseInt(version.split(".")[0], 10) >= 23)
-    .sort((a, b) => {
-      const [majorA, minorA, patchA] = a.split(".").map(Number);
-      const [majorB, minorB, patchB] = b.split(".").map(Number);
-      return majorA - majorB || minorA - minorB || patchA - patchB;
-    });
+  return Object.keys(data.versions).sort((a, b) => {
+    const [majorA, minorA, patchA] = a.split(".").map(Number);
+    const [majorB, minorB, patchB] = b.split(".").map(Number);
+    return majorA - majorB || minorA - minorB || patchA - patchB;
+  });
 }
+
 async function extractAndPublish(version) {
   try {
     const lastVersionPath = join(__dirname, "lastVersion.json");
@@ -39,14 +38,21 @@ async function extractAndPublish(version) {
     packageJson.version = version.replace("^", ""); // Ensure versioning aligns with Electron version
     writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
-    // Install the specific version of Electron
-    execSync("npm install", { stdio: "inherit" });
+    // Create a temporary directory for installing Electron
+    const tempDir = path.join(__dirname, "tmp");
+    await fs.ensureDir(tempDir);
+
+    // Install the specific version of Electron in the temporary directory
+    execSync(`npm install electron@${version}`, {
+      cwd: tempDir,
+      stdio: "inherit",
+    });
 
     // Extract the typings
-    const electronPath = dirname(require.resolve("electron/package.json"));
-    const typingsPath = join(electronPath, "electron.d.ts");
-    const destinationPath = join(__dirname, "dist", "electron.d.ts");
-    await ensureDir(dirname(destinationPath));
+    const electronPath = path.join(tempDir, "node_modules", "electron");
+    const typingsPath = path.join(electronPath, "electron.d.ts");
+    const destinationPath = path.join(__dirname, "dist", "electron.d.ts");
+    await ensureDir(path.dirname(destinationPath));
     await copy(typingsPath, destinationPath);
     console.log("Typings extracted successfully!");
 
