@@ -3,11 +3,13 @@ import { join, dirname } from "path";
 import { execSync } from "child_process";
 import fetch from "node-fetch";
 import { fileURLToPath } from "url";
-import lastVersion from "./lastVersion.json";
+import { createRequire } from "module";
 
 const { writeFileSync, ensureDir, copy } = pkg;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const require = createRequire(import.meta.url);
 
 async function getAllElectronVersions() {
   const response = await fetch("https://registry.npmjs.org/electron");
@@ -63,7 +65,8 @@ async function extractAndPublish(version) {
 
 async function main() {
   const versions = await getAllElectronVersions();
-  const lastVersion = lastVersion.lastVersion;
+  const lastVersionPath = join(__dirname, "lastVersion.json");
+  const lastVersion = require(lastVersionPath).lastVersion;
 
   for (const version of versions) {
     if (version > lastVersion) {
