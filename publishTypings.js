@@ -63,7 +63,7 @@ async function extractAndPublish(version) {
 async function main() {
   const versions = await getAllElectronVersions();
   const lastVersionPath = join(__dirname, "lastVersion.json");
-  const lastVersion = require(lastVersionPath).lastVersion;
+  const lastVersion = import(lastVersionPath).lastVersion;
 
   for (const version of versions) {
     if (version > lastVersion) {
