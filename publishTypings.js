@@ -1,7 +1,10 @@
-const fs = require("fs-extra");
-const path = require("path");
-const execSync = require("child_process").execSync;
-const fetch = require("node-fetch");
+import { writeFileSync, ensureDir, copy } from "fs-extra";
+import { join, dirname } from "path";
+import { execSync } from "child_process";
+import fetch from "node-fetch";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function getAllElectronVersions() {
   const response = await fetch("https://registry.npmjs.org/electron");
@@ -15,7 +18,7 @@ async function getAllElectronVersions() {
 
 async function extractAndPublish(version) {
   try {
-    const lastVersionPath = path.join(__dirname, "lastVersion.json");
+    const lastVersionPath = join(__dirname, "lastVersion.json");
     const lastVersion = require(lastVersionPath).lastVersion;
 
     if (lastVersion === version) {
@@ -24,21 +27,21 @@ async function extractAndPublish(version) {
     }
 
     // Update package.json with the new Electron version
-    const packageJsonPath = path.join(__dirname, "package.json");
+    const packageJsonPath = join(__dirname, "package.json");
     const packageJson = require(packageJsonPath);
     packageJson.dependencies.electron = version;
     packageJson.version = version.replace("^", ""); // Ensure versioning aligns with Electron version
-    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
     // Install the specific version of Electron
     execSync("npm install", { stdio: "inherit" });
 
     // Extract the typings
-    const electronPath = path.dirname(require.resolve("electron/package.json"));
-    const typingsPath = path.join(electronPath, "electron.d.ts");
-    const destinationPath = path.join(__dirname, "dist", "electron.d.ts");
-    await fs.ensureDir(path.dirname(destinationPath));
-    await fs.copy(typingsPath, destinationPath);
+    const electronPath = dirname(require.resolve("electron/package.json"));
+    const typingsPath = join(electronPath, "electron.d.ts");
+    const destinationPath = join(__dirname, "dist", "electron.d.ts");
+    await ensureDir(dirname(destinationPath));
+    await copy(typingsPath, destinationPath);
     console.log("Typings extracted successfully!");
 
     // Publish the package
@@ -46,7 +49,7 @@ async function extractAndPublish(version) {
     console.log("Package published successfully!");
 
     // Update last published version
-    fs.writeFileSync(
+    writeFileSync(
       lastVersionPath,
       JSON.stringify({ lastVersion: version }, null, 2)
     );
@@ -57,7 +60,7 @@ async function extractAndPublish(version) {
 
 async function main() {
   const versions = await getAllElectronVersions();
-  const lastVersionPath = path.join(__dirname, "lastVersion.json");
+  const lastVersionPath = join(__dirname, "lastVersion.json");
   const lastVersion = require(lastVersionPath).lastVersion;
 
   for (const version of versions) {

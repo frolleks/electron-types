@@ -2,6 +2,7 @@
   "name": "@frolleks/standalone-electron-types",
   "version": "22.3.27",
   "description": "Types extracted from the Electron package",
+  "type": "module",
   "main": "index.js",
   "types": "dist/electron.d.ts",
   "scripts": {
