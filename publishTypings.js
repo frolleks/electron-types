@@ -1,8 +1,10 @@
-import { writeFileSync, ensureDir, copy } from "fs-extra";
+import pkg from "fs-extra";
 import { join, dirname } from "path";
 import { execSync } from "child_process";
 import fetch from "node-fetch";
 import { fileURLToPath } from "url";
+
+const { writeFileSync, ensureDir, copy } = pkg;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
