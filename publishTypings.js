@@ -62,7 +62,7 @@ async function extractAndPublish(version) {
     console.log("Typings extracted successfully!");
 
     // Publish the package
-    execSync("npm publish", { stdio: "inherit" });
+    execSync("npm publish --access public", { stdio: "inherit" });
     console.log("Package published successfully!");
 
     // Update last published version
