@@ -3,6 +3,7 @@ import { join, dirname } from "path";
 import { execSync } from "child_process";
 import fetch from "node-fetch";
 import { fileURLToPath } from "url";
+import lastVersion from "./lastVersion.json";
 
 const { writeFileSync, ensureDir, copy } = pkg;
 
@@ -62,8 +63,7 @@ async function extractAndPublish(version) {
 
 async function main() {
   const versions = await getAllElectronVersions();
-  const lastVersionPath = join(__dirname, "lastVersion.json");
-  const lastVersion = import(lastVersionPath).lastVersion;
+  const lastVersion = lastVersion.lastVersion;
 
   for (const version of versions) {
     if (version > lastVersion) {
