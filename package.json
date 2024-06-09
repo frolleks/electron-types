@@ -11,6 +11,12 @@
   "keywords": [
     "electron"
   ],
+  "files": [
+    "package.json",
+    "lastVersion.json",
+    "dist/electron.d.ts",
+    "README.md"
+  ],
   "author": "Frolleks <frolleks@hotmail.com>",
   "license": "MIT",
   "devDependencies": {
