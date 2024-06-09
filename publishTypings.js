@@ -14,13 +14,14 @@ const require = createRequire(import.meta.url);
 async function getAllElectronVersions() {
   const response = await fetch("https://registry.npmjs.org/electron");
   const data = await response.json();
-  return Object.keys(data.versions).sort((a, b) => {
-    const [majorA, minorA, patchA] = a.split(".").map(Number);
-    const [majorB, minorB, patchB] = b.split(".").map(Number);
-    return majorA - majorB || minorA - minorB || patchA - patchB;
-  });
+  return Object.keys(data.versions)
+    .filter((version) => parseInt(version.split(".")[0], 10) >= 23)
+    .sort((a, b) => {
+      const [majorA, minorA, patchA] = a.split(".").map(Number);
+      const [majorB, minorB, patchB] = b.split(".").map(Number);
+      return majorA - majorB || minorA - minorB || patchA - patchB;
+    });
 }
-
 async function extractAndPublish(version) {
   try {
     const lastVersionPath = join(__dirname, "lastVersion.json");
