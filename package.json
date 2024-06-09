@@ -1,0 +1,23 @@
+{
+  "name": "@frolleks/standalone-electron-types",
+  "version": "22.3.27",
+  "description": "Types extracted from the Electron package",
+  "main": "index.js",
+  "types": "dist/electron.d.ts",
+  "scripts": {
+    "extract": "node publishTypings.js"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "Frolleks <frolleks@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "electron": "^22.3.27"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "node-fetch": "^3.3.2"
+  }
+}
