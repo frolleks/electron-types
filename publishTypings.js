@@ -33,6 +33,16 @@ async function getAllElectronVersions(lastVersion) {
     });
 }
 
+function getNpmTag(version) {
+  if (version.includes("alpha")) {
+    return "alpha";
+  } else if (version.includes("beta")) {
+    return "beta";
+  } else {
+    return "latest";
+  }
+}
+
 async function extractAndPublish(version) {
   try {
     const lastVersionPath = join(__dirname, "lastVersion.json");
@@ -61,8 +71,12 @@ async function extractAndPublish(version) {
     await copy(typingsPath, destinationPath);
     console.log("Typings extracted successfully!");
 
+    const npmTag = getNpmTag(version);
+
     // Publish the package
-    execSync("npm publish --access public", { stdio: "inherit" });
+    execSync(`npm publish --access public --tag ${npmTag}`, {
+      stdio: "inherit",
+    });
     console.log("Package published successfully!");
 
     // Update last published version
