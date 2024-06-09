@@ -46,7 +46,7 @@ async function extractAndPublish(version) {
     // Update package.json with the new Electron version
     const packageJsonPath = join(__dirname, "package.json");
     const packageJson = require(packageJsonPath);
-    packageJson.dependencies.electron = version;
+    packageJson.devDependencies.electron = version;
     packageJson.version = version.replace("^", ""); // Ensure versioning aligns with Electron version
     writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 

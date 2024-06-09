@@ -1,5 +1,5 @@
 {
-  "name": "@frolleks/standalone-electron-types",
+  "name": "electron-typings",
   "version": "22.3.27",
   "description": "Types extracted from the Electron package",
   "type": "module",
