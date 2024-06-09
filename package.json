@@ -1,5 +1,5 @@
 {
-  "name": "electron-type-defs",
+  "name": "electron-types",
   "version": "22.3.27",
   "description": "Types extracted from the Electron package",
   "type": "module",
