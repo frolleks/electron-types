@@ -38,6 +38,7 @@ function getNpmTag(version) {
 
 async function extractAndPublish(version) {
   try {
+    const lastVersionPath = join(__dirname, "lastVersion.json");
     const lastVersion = lastVersionFile.lastVersion;
 
     if (lastVersion === version) {

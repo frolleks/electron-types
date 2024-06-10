@@ -1,6 +1,6 @@
 {
   "name": "electron-typings",
-  "version": "27.0.0",
+  "version": "27.1.2",
   "description": "Types extracted from the Electron package",
   "main": "index.js",
   "types": "electron.d.ts",
@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.5",
-    "electron": "^27.0.0",
+    "electron": "^27.1.2",
     "fs-extra": "^11.2.0",
     "node-fetch-cjs": "^3.3.2"
   }
