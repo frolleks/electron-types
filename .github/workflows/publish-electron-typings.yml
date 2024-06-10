@@ -29,8 +29,7 @@ jobs:
       - name: Publish Typings for All Versions
         run: npm run extract
 
-      - name: Commit and Push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update last published version"
           branch: main

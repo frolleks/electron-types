@@ -1,4 +1,4 @@
-# electron-types
+# electron-typings
 
 > ### ⚠️ NOTICE! ⚠️
 >

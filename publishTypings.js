@@ -1,15 +1,8 @@
-import pkg from "fs-extra";
-import { join, dirname } from "path";
-import { execSync } from "child_process";
-import fetch from "node-fetch";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
-
-const { writeFileSync, ensureDir, copy } = pkg;
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const require = createRequire(import.meta.url);
+const { writeFileSync, ensureDir, copy } = require("fs-extra");
+const { join, dirname } = require("path");
+const { execSync } = require("child_process");
+const { default: fetch } = require("node-fetch-cjs");
+const lastVersionFile = require("./lastVersion.json");
 
 async function getAllElectronVersions(lastVersion) {
   const response = await fetch("https://registry.npmjs.org/electron");
@@ -45,8 +38,7 @@ function getNpmTag(version) {
 
 async function extractAndPublish(version) {
   try {
-    const lastVersionPath = join(__dirname, "lastVersion.json");
-    const lastVersion = require(lastVersionPath).lastVersion;
+    const lastVersion = lastVersionFile.lastVersion;
 
     if (lastVersion === version) {
       console.log(`Version ${version} is already published. Skipping.`);
@@ -66,7 +58,7 @@ async function extractAndPublish(version) {
     // Extract the typings
     const electronPath = dirname(require.resolve("electron/package.json"));
     const typingsPath = join(electronPath, "electron.d.ts");
-    const destinationPath = join(__dirname, "dist", "electron.d.ts");
+    const destinationPath = join(__dirname, "electron.d.ts");
     await ensureDir(dirname(destinationPath));
     await copy(typingsPath, destinationPath);
     console.log("Typings extracted successfully!");
@@ -90,8 +82,7 @@ async function extractAndPublish(version) {
 }
 
 async function main() {
-  const lastVersionPath = join(__dirname, "lastVersion.json");
-  const lastVersion = require(lastVersionPath).lastVersion;
+  const lastVersion = lastVersionFile.lastVersion;
   const versions = await getAllElectronVersions(lastVersion);
 
   for (const version of versions) {
