@@ -41,6 +41,8 @@ async function extractAndPublish(version) {
     const lastVersionPath = join(__dirname, "lastVersion.json");
     const lastVersion = lastVersionFile.lastVersion;
 
+    console.log(lastVersion, version);
+
     if (lastVersion === version) {
       console.log(`Version ${version} is already published. Skipping.`);
       return;
