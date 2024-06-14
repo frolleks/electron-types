@@ -33,4 +33,4 @@ jobs:
         with:
           commit_message: "chore: update last published version"
           branch: main
-          file_pattern: lastVersion.json
+          file_pattern: "lastVersion.json package.json"
