@@ -19,8 +19,9 @@
   "author": "Frolleks <frolleks@hotmail.com>",
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/frolleks/electron-typings"
+    "url": "git+https://github.com/frolleks/electron-typings.git"
   },
+  "homepage": "https://github.com/frolleks/electron-typings",
   "devDependencies": {
     "@types/node": "^20.10.5",
     "electron": "^27.1.2",
